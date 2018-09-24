@@ -17,7 +17,7 @@ def ScrapeSeasonsInRange(start,end):
     #each loop is cycling through a season
     while current <= end:
         #gets all games from given season(at start)
-        ScrapeMatchURLFromSeason(url+str(current)+'.html',CurrentUrlArray)
+        ScrapeMatchURLFromSeason(url+str(current)+'.html', CurrentUrlArray)
         FormatBasicUrltoComplete(CurrentUrlArray)
         
 #Format game         
@@ -41,10 +41,11 @@ def ScrapebasicMatchTables(url):
     soup = BeautifulSoup(source,'l xml')
     ScrapeTeamStats(soup.find('sortableTable0'))
     ScrapeTeamStats(soup.find('sortableTable1'))
-    #Get scoring progression here
-    
+    #Get scoring progression by table here
+     
 def ScrapeTeamStats(team):
     for player in team.find_all('div',class_='tr'):
+        #add player URL
         ScrapePlayerRow(player)
     
 def ScrapePlayerRow(player):
@@ -56,19 +57,36 @@ def ScrapePlayerRow(player):
             stats.append(stat)
         else:
             stats.append(0) #AFL Tables if they did not record a stat there is no 0
-            
-    PlayerID = PlayerInDB(stats[1])
+    PlayerID = PlayerInDB(playerURL)
     if PlayerID == -1:
+        player[0]
          #create new entry for player
+         
          
     #Insert array data into database            
     
+def CreateNewPlayerEntry(playerName, DOB):
+    #connect to database/ check connection
+    #player ID auto increments
+    #Name, DOB, Height, Weight, Armspan
+    newPlayerQuery = 'INSERT INTO Player VALUES'+ playerName + ' ' + DOB
+    findPlayerId = 'SELECT playerID from Player WHERE playerName === ' + playerName + ' AND DOB === ' + DOB
     
-def PlayerInDB(stats): #return id
+    #exec queries
+    playerID = 123
+    return playerID
     
-    playername = stats[0]
-    
-    return 69
+
+def PlayerInDB(playerURL): #return id
+    #create request for player information
+    #get name and DOB, limitation, if two players have the ame name and were born on the same day
+    playerName = '<name>'
+    DOB = '<xx/yy/zzzz>
+    #Query to database to find 
+    query = 'SELECT playerID FROM PLAYER WHERE name ===' + player ' AND DOB === ' + DOB'
+    if query == -1 #if err/ not found
+       query = CreateNewPlayerEntry(playerName, DOB)
+    return query
 
     
   
