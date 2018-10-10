@@ -9,7 +9,7 @@ import lxml
 
 def main():
     print('starting')
-    ScrapeSeasonsInRange(2017,2017)
+    ScrapeSeasonsInRange(2018,2018)
 
 #loop through years to be scraped
 def ScrapeSeasonsInRange(start,end):
@@ -46,29 +46,28 @@ def ScrapeMatchURLFromSeason(url,CurrentUrlArray):
           
 def ScrapeBasicMatchTables(url):
     print('Scraping ' + url)
-    source = requests.get(url).text
+    source = requests.get(url)
     soup = BeautifulSoup(source,'lxml')
+    tables = soup.find_all('table')
+    print('asdf')
+    for a in tables:
+        print('herio')
+        print(str(a))
+        print('-----------------------------------------------')
+    #home = tables[4].find('tbody')
+    #ScrapeTeamStats(home)
+    #away = tables[2].find('tbody')
+    #ScrapeTeamStats(away)
     
-    #ScrapeMatchInfo(soup.find('tbody'))
-    print(soup.find('table',id='sortabletable0'))
-    ScrapeTeamStats(soup.find('table',id='sortabletable0'))
-   # ScrapeTeamStats(soup.find('sortableTable1'))
-    #Get scoring progression by table here
-
-def ScrapeMatchInfo(MatchTable):
-    soup = BeautifulSoup(MatchTable, 'lxml')
-    information = soup.findall('td')[1]
-    print(information)
-    
-    #roundNum = information.split[1,1]
-    #ground = 0
-    #attendance= 0
-    #date= 0
-    
+   # scoring = tables[6].text
+  
      
 def ScrapeTeamStats(team):
-    source = team.text
-    soup = BeautifulSoup(source,'lxml')
+    soup = BeautifulSoup(team, 'lxml')
+    print('team' + team)
+    print(' ')
+    print(' ')
+    print('------------------------------------------------------------------ ')
     for player in soup.find_all('tr'):#add player URL
         print('player ' + player) 
         #ScrapePlayerRow(player)
@@ -115,5 +114,15 @@ def PlayerInDB(playerURL): #return id
        query = CreateNewPlayerEntry(playerName, DOB)
     return query
 
+
+def ScrapeMatchInfo(MatchTable):
+    soup = BeautifulSoup(MatchTable, 'lxml')
+    information = soup.findall('td')[1]
+    print(information)
+    
+    #roundNum = information.split[1,1]
+    #ground = 0
+    #attendance= 0
+    #date= 0
     
 main();
