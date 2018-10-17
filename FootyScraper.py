@@ -23,8 +23,8 @@ def ScrapeSeasonsInRange(start,end):
         #gets all games from given season(at start)
         ScrapeMatchURLFromSeason(url+str(current)+'.html', CurrentUrlArray)
         CurrentUrlArray = CreateURLArray(CurrentUrlArray)
-        for a in CurrentUrlArray:
-            ScrapeBasicMatchTables(a)
+        #for a in CurrentUrlArray:
+        ScrapeBasicMatchTables(CurrentUrlArray[0])
         current = current + 1
         
 #Format game from Season game page
@@ -46,13 +46,13 @@ def ScrapeMatchURLFromSeason(url,CurrentUrlArray):
           
 def ScrapeBasicMatchTables(url):
     print('Scraping ' + url)
-    source = requests.get(url)
+    source = requests.get(url).text
     soup = BeautifulSoup(source,'lxml')
     tables = soup.find_all('table')
     print('asdf')
     for a in tables:
         print('herio')
-        print(str(a))
+        print(str(a.prettify))
         print('-----------------------------------------------')
     #home = tables[4].find('tbody')
     #ScrapeTeamStats(home)
