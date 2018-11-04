@@ -24,8 +24,9 @@ def ScrapeSeasonsInRange(start,end):
         #gets all games from given season(at start)
         ScrapeMatchURLFromSeason(url+str(current)+'.html', CurrentUrlArray)
         CurrentUrlArray = CreateURLArray(CurrentUrlArray)
-        #for a in CurrentUrlArray:
-        ScrapeBasicMatchTables(CurrentUrlArray[0])
+        current = 0
+        for a in CurrentUrlArray:
+            ScrapeBasicMatchTables(CurrentUrlArray[current])
         current = current + 1
         
 #Format game from Season game page
@@ -44,55 +45,56 @@ def ScrapeMatchURLFromSeason(url,CurrentUrlArray):
     for a in soup.find_all('a',href=True) :
         if '/stats/games/' in a['href']:
             CurrentUrlArray.append(a['href'])
-          
+
+
+#Magic starts here, get the tables from a match page          
 def ScrapeBasicMatchTables(url):
     print('Scraping ' + url)
+    print('')
     source = requests.get(url).text
     soup = BeautifulSoup(source,'lxml')
     #print('asdf')
     tableNo = 0
+    count = 0
+    teams = []
     #print(soup.prettify())
-    for a in soup.find_all('tbody'):
-        tableNo = tableNo + 1
-        
-       # print(a)
-        if tableNo == 1 or tableNo == 2:
-            print('Team Number ' + str(tableNo))
-            ScrapePlayerRow(str(a))
-            print('=====================================================================')
-     
    
-def ScrapePlayerRow(table):
+    for a in soup.find_all('a', href=True): #Team Names
+        if 'teams' in a['href'] and count < 2:
+            teams.append(a.text)
+            print(teams[count])
+            count = count + 1
+           
+    for a in soup.find_all('tbody'): #Player Stat lines
+        #print(tableNo)
+        #print(str(a)[0:200])
+        if tableNo == 0 or tableNo == 1:
+            ScrapePlayerRow(str(a),teams[tableNo])
+            print('=====================================')
+        tableNo = tableNo + 1  
+   
+def ScrapePlayerRow(table, team):
     #Have the two stats tables for all players
     soup = BeautifulSoup(table,'lxml')
+    print('==============')
+    print('== '+team +' ==')
+    print('==============')
     for row in soup.find_all('tr'):
-        ScrapePlayerData(str(row))
-        print('--------------------------------------------------')
-
+        player = ScrapePlayerData(str(row))
+        print(player[1] + ' ' + str(player[2]))
+        print('-------------------------------------')
+        
 def ScrapePlayerData(row): 
-
      soup = BeautifulSoup(row,'lxml')
      index = 0
      player = []
-   
-     
      for stat in soup.find_all('td'):
-         if index == 1 or not stat.text.isdigit():
+         if index == 1 or stat.text.isdigit():
              player.append(stat.text)
          else:
              player.append(0)
          index = index + 1
-     print(player[1])
-          
-        
-  
-    
-     #print('Kicks ' + str(ki)+ ', Handballs ' + str(hb) + ', Disposals ' + str(di))
-         
-      
-
-
-
-        
+     return player
+               
 
 main();
