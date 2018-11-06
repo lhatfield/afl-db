@@ -10,17 +10,31 @@ import lxml
 
 def main():
     print('starting')
-    ScrapeSeasonsInRange(2018,2018)
+    ScrapingRange = [1911,2018]
+    if ScrapingRange[0] < 1897:
+        if ScrapingRange[0] < 1912:
+            print('Prior to 1912 no jumpers had numbers')
+        if ScrapingRange[0] < 1965:
+            print('Prior to 1965 only goal tally was recorded')
+        if ScrapingRange[0] < 1999:
+            print('Prior to 1999 Possessions, contested marks and other stats were not recorded')
+        if ScrapingRange[0] < 2004:
+            print('Prior to 2004 Goal assists and %time played were not counted')
+        ScrapeSeasonsInRange(ScrapingRange)
+    else:
+        print('Invalid Argument Given: no game statistics were recorded prior to 1897')
+        
+  
 
 #loop through years to be scraped
-def ScrapeSeasonsInRange(start,end):
-    print('ScrapeSeasons In Range From ' + str(start) + ' to ' + str(end))
+def ScrapeSeasonsInRange(ScrapingRange):
+    print('ScrapeSeasons In Range From ' + str(ScrapingRange[0]) + ' to ' + str(ScrapingRange[1]))
     CurrentUrlArray = []
-    current = start
+    current = ScrapingRange[0]
     url = 'https://afltables.com/afl/seas/'
     
     #each loop is cycling through a season
-    while current <= end:
+    while current <= ScrapingRange[1]:
         #gets all games from given season(at start)
         ScrapeMatchURLFromSeason(url+str(current)+'.html', CurrentUrlArray)
         CurrentUrlArray = CreateURLArray(CurrentUrlArray)
