@@ -27,7 +27,7 @@ def ScrapeSeasonsInRange(start,end):
         current = 0
         for a in CurrentUrlArray:
             ScrapeBasicMatchTables(CurrentUrlArray[current])
-        current = current + 1
+            current = current + 1
         
 #Format game from Season game page
 def CreateURLArray(CurrentUrlArray):
@@ -62,7 +62,7 @@ def ScrapeBasicMatchTables(url):
     for a in soup.find_all('a', href=True): #Team Names
         if 'teams' in a['href'] and count < 2:
             teams.append(a.text)
-            print(teams[count])
+            #print(teams[count])
             count = count + 1
            
     for a in soup.find_all('tbody'): #Player Stat lines
@@ -76,9 +76,9 @@ def ScrapeBasicMatchTables(url):
 def ScrapePlayerRow(table, team):
     #Have the two stats tables for all players
     soup = BeautifulSoup(table,'lxml')
-    print('==============')
+    print('=================')
     print('== '+team +' ==')
-    print('==============')
+    print('=================')
     for row in soup.find_all('tr'):
         player = ScrapePlayerData(str(row))
         print(player[1] + ' ' + str(player[2]))
