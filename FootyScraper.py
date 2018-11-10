@@ -1,12 +1,9 @@
 #Script to scrape season information to populate AFL DB
-#Created with help from https://youtu.be/ng2o98k983k
-#Tutorial starts @ 9.14
+#Created with help from https://youtu.be/ng2o98k983k - Tutorial starts @ 9.14
 
 from bs4 import BeautifulSoup
 import requests
 import lxml
-
-
 
 def main():
     print('starting')
